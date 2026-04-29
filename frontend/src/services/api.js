@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "http://localhost:5000/api",
+  baseURL: import.meta.env.VITE_API_URL || "http://localhost:5000/api",
 });
 
 // Attach token to every request
@@ -38,5 +38,6 @@ export const getBillingHistory = () => API.get("/billing/history");
 export const upgradePlan = (plan) => API.patch("/billing/upgrade", { plan });
 
 // Payment
-export const createOrder = (amount) => API.post('/payment/create-order', { amount });
-export const verifyPayment = (data) => API.post('/payment/verify', data);
+export const createOrder = (amount) =>
+  API.post("/payment/create-order", { amount });
+export const verifyPayment = (data) => API.post("/payment/verify", data);
