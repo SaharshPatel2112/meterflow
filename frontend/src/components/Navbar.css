@@ -1,0 +1,112 @@
+.navbar {
+  background-color: #1e293b;
+  border-bottom: 1px solid #334155;
+  padding: 0 1.5rem;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.navbar-inner {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.navbar-logo {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #60a5fa;
+  letter-spacing: -0.5px;
+}
+
+.navbar-right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.navbar-user {
+  font-size: 0.875rem;
+  color: #94a3b8;
+}
+
+.navbar-plan {
+  color: #60a5fa;
+  font-weight: 500;
+  text-transform: capitalize;
+}
+
+.navbar-logout {
+  background-color: #334155;
+  color: #e2e8f0;
+  border: none;
+  padding: 0.4rem 1rem;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.navbar-logout:hover {
+  background-color: #475569;
+}
+
+/* Modal */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.65);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-box {
+  background-color: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 0.75rem;
+  padding: 2rem;
+  width: 100%;
+  max-width: 360px;
+  text-align: center;
+}
+
+.modal-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #ffffff;
+  margin-bottom: 0.5rem;
+}
+
+.modal-text {
+  font-size: 0.875rem;
+  color: #94a3b8;
+  margin-bottom: 1.5rem;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
+}
+
+.navbar-logout-confirm {
+  background-color: #dc2626;
+  color: #ffffff;
+  border: none;
+  padding: 0.4rem 1.25rem;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.navbar-logout-confirm:hover {
+  background-color: #b91c1c;
+}
