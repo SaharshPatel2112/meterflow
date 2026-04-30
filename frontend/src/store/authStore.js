@@ -1,20 +1,22 @@
 import { create } from "zustand";
 
-const savedUser = localStorage.getItem("user");
+// Read from sessionStorage (per-tab)
+const savedUser = sessionStorage.getItem("user");
+const savedToken = sessionStorage.getItem("accessToken");
 
 const useAuthStore = create((set) => ({
   user: savedUser ? JSON.parse(savedUser) : null,
-  token: localStorage.getItem("accessToken") || null,
+  token: savedToken || null,
 
   setAuth: (user, token) => {
-    localStorage.setItem("accessToken", token);
-    localStorage.setItem("user", JSON.stringify(user));
+    sessionStorage.setItem("accessToken", token);
+    sessionStorage.setItem("user", JSON.stringify(user));
     set({ user, token });
   },
 
   logout: () => {
-    localStorage.removeItem("accessToken");
-    localStorage.removeItem("user");
+    sessionStorage.removeItem("accessToken");
+    sessionStorage.removeItem("user");
     set({ user: null, token: null });
   },
 }));
