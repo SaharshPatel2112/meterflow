@@ -4,6 +4,7 @@ import DashboardPage from "./pages/DashboardPage";
 import ApisPage from "./pages/ApisPage";
 import BillingPage from "./pages/BillingPage";
 import useAuthStore from "./store/authStore";
+import ProfilePage from "./pages/ProfilePage";
 
 function PrivateRoute({ children }) {
   const token = useAuthStore((s) => s.token);
@@ -20,6 +21,14 @@ export default function App() {
           element={
             <PrivateRoute>
               <DashboardPage />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/profile"
+          element={
+            <PrivateRoute>
+              <ProfilePage />
             </PrivateRoute>
           }
         />
