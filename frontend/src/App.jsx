@@ -5,6 +5,7 @@ import ApisPage from "./pages/ApisPage";
 import BillingPage from "./pages/BillingPage";
 import useAuthStore from "./store/authStore";
 import ProfilePage from "./pages/ProfilePage";
+import AdminDashboard from "./pages/AdminDashboard";
 
 function PrivateRoute({ children }) {
   const token = useAuthStore((s) => s.token);
@@ -21,6 +22,14 @@ export default function App() {
           element={
             <PrivateRoute>
               <DashboardPage />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/admin"
+          element={
+            <PrivateRoute>
+              <AdminDashboard />
             </PrivateRoute>
           }
         />

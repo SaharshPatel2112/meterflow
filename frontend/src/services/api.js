@@ -17,7 +17,14 @@ API.interceptors.request.use((config) => {
 export const signup = (data) => API.post("/auth/signup", data);
 export const login = (data) => API.post("/auth/login", data);
 export const getMe = () => API.get("/auth/me");
-export const updateProfile = (data) => API.put('/auth/profile', data);
+export const updateProfile = (data) => API.put("/auth/profile", data);
+
+// Admin
+export const getAdminStats = () => API.get("/admin/stats");
+export const getAdminChart = () => API.get("/admin/chart");
+export const getAdminUsers = () => API.get("/admin/users");
+export const getAdminLogs = () => API.get("/admin/logs");
+export const getAdminRevenue = () => API.get("/admin/revenue");
 
 // APIs
 export const getMyApis = () => API.get("/apis");

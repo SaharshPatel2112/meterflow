@@ -13,6 +13,7 @@ import billingRoutes from "./routes/billingRoutes.js";
 import paymentRoutes from "./routes/paymentRoutes.js";
 import getRedis from "./config/redis.js";
 import getRazorpay from "./services/razorpayService.js";
+import adminDashboardRoutes from "./routes/adminDashboardRoutes.js";
 
 const app = express();
 
@@ -35,6 +36,7 @@ app.use("/api/apis", apiRoutes);
 app.use("/api/usage", usageRoutes);
 app.use("/api/billing", billingRoutes);
 app.use("/api/payment", paymentRoutes);
+app.use("/api/admin", adminDashboardRoutes);
 app.use("/gateway", gatewayRoutes);
 
 app.get("/", (req, res) => {

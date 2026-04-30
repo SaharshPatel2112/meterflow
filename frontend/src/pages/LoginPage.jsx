@@ -21,7 +21,11 @@ export default function LoginPage() {
         ? await login({ email: form.email, password: form.password })
         : await signup(form);
       setAuth(res.data.user, res.data.accessToken);
-      navigate("/dashboard");
+      if (res.data.user.role === "admin") {
+        navigate("/admin");
+      } else {
+        navigate("/dashboard");
+      }
     } catch (err) {
       setError(err.response?.data?.message || "Something went wrong");
     } finally {
