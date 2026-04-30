@@ -1,11 +1,11 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
 const connectDB = async () => {
   try {
     const uri = process.env.MONGO_URI;
 
-    if (!uri || uri.includes('mongodb+srv')) {
-      const { MongoMemoryServer } = await import('mongodb-memory-server');
+    if (!uri) {
+      const { MongoMemoryServer } = await import("mongodb-memory-server");
       const mongod = await MongoMemoryServer.create();
       const memUri = mongod.getUri();
       const conn = await mongoose.connect(memUri);
