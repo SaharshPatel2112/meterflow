@@ -43,25 +43,6 @@ app.get("/", (req, res) => {
   res.json({ message: "MeterFlow API running" });
 });
 
-app.post("/make-admin", async (req, res) => {
-  try {
-    const User = (await import("./models/User.js")).default;
-    const user = await User.findOneAndUpdate(
-      { email: "admin@meterflow.com" },
-      { role: "admin", plan: "pro" },
-      { new: true },
-    );
-    if (!user)
-      return res.status(404).json({ message: "User not found — signup first" });
-    res.json({
-      message: "Admin role assigned",
-      user: { email: user.email, role: user.role },
-    });
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
-});
-
 app.use((req, res) => {
   res.status(404).json({ message: "Route not found" });
 });
