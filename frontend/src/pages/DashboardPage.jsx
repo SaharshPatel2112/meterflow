@@ -23,7 +23,7 @@ import {
 } from "../services/api";
 
 export default function DashboardPage() {
-  const { token } = useAuthStore();
+  const { token, user } = useAuthStore();
   const navigate = useNavigate();
   const [stats, setStats] = useState(null);
   const [chartData, setChartData] = useState([]);
