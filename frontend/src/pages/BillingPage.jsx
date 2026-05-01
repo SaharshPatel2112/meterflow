@@ -216,8 +216,61 @@ export default function BillingPage() {
                   </p>
                 </div>
                 <div>
-                  <p className="billing-stat-label">Amount Due</p>
+                  <p className="billing-stat-label">This Month</p>
                   <p className="billing-stat-val">₹{billing.amount}</p>
+                </div>
+              </div>
+
+              {/* Total Due Till Date */}
+              <div
+                style={{
+                  marginTop: "1rem",
+                  padding: "1rem",
+                  background: "#0f172a",
+                  borderRadius: "0.5rem",
+                  border: "1px solid #334155",
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
+              >
+                <div>
+                  <p
+                    style={{
+                      fontSize: "0.75rem",
+                      color: "#94a3b8",
+                      marginBottom: "0.25rem",
+                    }}
+                  >
+                    Total Due Till Date
+                  </p>
+                  <p
+                    style={{
+                      fontSize: "1.5rem",
+                      fontWeight: "700",
+                      color: "#ffffff",
+                    }}
+                  >
+                    ₹
+                    {history
+                      .filter((h) => h.status === "pending" && h.amount > 0)
+                      .reduce((sum, h) => sum + h.amount, 0)
+                      .toFixed(2)}
+                  </p>
+                </div>
+                <div
+                  style={{
+                    fontSize: "0.75rem",
+                    color: "#64748b",
+                    textAlign: "right",
+                  }}
+                >
+                  {
+                    history.filter(
+                      (h) => h.status === "pending" && h.amount > 0,
+                    ).length
+                  }{" "}
+                  unpaid period(s)
                 </div>
               </div>
 
