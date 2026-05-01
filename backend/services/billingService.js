@@ -30,7 +30,7 @@ export const calculateBilling = async (userId) => {
 
     const pricing = PRICING[user.plan] || PRICING.free;
     const billableRequests = Math.max(0, totalRequests - pricing.freeLimit);
-    const amount = user.plan === "pro" ? (billableRequests / 10) * 0.5 : 0;
+    const amount = user.plan === "pro" ? (billableRequests / 10) * 1 : 0;
 
     // Update or create billing record
     const billing = await Billing.findOneAndUpdate(
