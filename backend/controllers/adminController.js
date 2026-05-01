@@ -113,9 +113,12 @@ export const getAllUsers = async (req, res) => {
           userId: user._id,
           status: "active",
         });
-        const billing = await Billing.findOne({ userId: user._id }).sort({
-          createdAt: -1,
+        const billings = await Billing.find({
+          userId: user._id,
+          status: "pending",
+          amount: { $gt: 0 },
         });
+        const totalDue = billings.reduce((sum, b) => sum + b.amount, 0);
 
         return {
           id: user._id,
@@ -127,8 +130,8 @@ export const getAllUsers = async (req, res) => {
           totalRequests,
           totalApis,
           activeKeys,
-          amountDue: billing?.amount || 0,
-          billingStatus: billing?.status || "none",
+          amountDue: parseFloat(totalDue.toFixed(2)),
+          billingStatus: billings.length > 0 ? "pending" : "clear",
         };
       }),
     );
