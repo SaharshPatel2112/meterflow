@@ -125,7 +125,7 @@ export default function BillingPage() {
               </div>
               <ul className="plan-features">
                 <li>
-                  <span className="check">✓</span> 100 requests/day
+                  <span className="check">✓</span> 10 requests/day
                 </li>
                 <li>
                   <span className="check">✓</span> Basic analytics
@@ -164,7 +164,7 @@ export default function BillingPage() {
               </div>
               <ul className="plan-features">
                 <li>
-                  <span className="check">✓</span> 5 free + ₹0.5/10 after
+                  <span className="check">✓</span> 10 free + ₹1/10 after
                 </li>
                 <li>
                   <span className="check">✓</span> 50 req/min rate limit

@@ -1,7 +1,7 @@
 import getRedis from "../config/redis.js";
 
 const PLANS = {
-  free: { limit: 100, window: 60 * 60 * 24 },
+  free: { limit: 10, window: 60 * 60 * 24 },
   pro: { limit: 50, window: 60 },
 };
 

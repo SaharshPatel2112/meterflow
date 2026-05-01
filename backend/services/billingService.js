@@ -4,12 +4,12 @@ import User from "../models/User.js";
 
 const PRICING = {
   free: {
-    freeLimit: 100,
-    pricePerHundred: 0,
+    freeLimit: 10,
+    pricePer10: 0,
   },
   pro: {
-    freeLimit: 5,
-    pricePer10: 0.5, // ₹0.5 per 100 requests
+    freeLimit: 10,
+    pricePer10: 1,
   },
 };
 
