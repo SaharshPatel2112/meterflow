@@ -4,18 +4,18 @@ import useAuthStore from "../store/authStore";
 import { useNavigate } from "react-router-dom";
 
 export default function Navbar() {
-  const { user, logout } = useAuthStore();
+  const user = useAuthStore((s) => s.user);
+  const logout = useAuthStore((s) => s.logout);
   const navigate = useNavigate();
   const [showConfirm, setShowConfirm] = useState(false);
-
-  const handleLogoutClick = () => {
-    setShowConfirm(true);
-  };
 
   const handleConfirmLogout = () => {
     logout();
     navigate("/login");
   };
+
+  const planLabel = user?.plan ?? "free";
+  const nameLabel = user?.name ?? "";
 
   return (
     <>
@@ -24,19 +24,19 @@ export default function Navbar() {
           <span className="navbar-logo">MeterFlow</span>
           <div className="navbar-right">
             <span className="navbar-user">
-              {user?.name} —{" "}
-              <span className="navbar-plan">
-                {user?.plan ? user.plan : "free"} plan
-              </span>
+              {nameLabel} —{" "}
+              <span className="navbar-plan">{planLabel} plan</span>
             </span>
-            <button onClick={handleLogoutClick} className="navbar-logout">
+            <button
+              onClick={() => setShowConfirm(true)}
+              className="navbar-logout"
+            >
               Logout
             </button>
           </div>
         </div>
       </nav>
 
-      {/* Logout Confirmation Modal */}
       {showConfirm && (
         <div className="modal-overlay">
           <div className="modal-box">

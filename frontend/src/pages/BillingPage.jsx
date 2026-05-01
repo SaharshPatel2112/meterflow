@@ -12,7 +12,9 @@ import {
 import { createOrder, verifyPayment } from "../services/api";
 
 export default function BillingPage() {
-  const { token, user, setAuth } = useAuthStore();
+  const token = useAuthStore((s) => s.token);
+  const user = useAuthStore((s) => s.user);
+  const setAuth = useAuthStore((s) => s.setAuth);
   const navigate = useNavigate();
   const [billing, setBilling] = useState(null);
   const [history, setHistory] = useState([]);
@@ -242,7 +244,7 @@ export default function BillingPage() {
               )}
             </div>
           )}
-          
+
           {/* History */}
           <div className="history-card">
             <h3 className="history-title">Billing History</h3>

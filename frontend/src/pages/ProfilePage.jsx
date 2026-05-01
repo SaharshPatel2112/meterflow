@@ -7,7 +7,9 @@ import { updateProfile } from "../services/api";
 import "./ProfilePage.css";
 
 export default function ProfilePage() {
-  const { user, token, setAuth } = useAuthStore();
+  const user = useAuthStore((s) => s.user);
+  const token = useAuthStore((s) => s.token);
+  const setAuth = useAuthStore((s) => s.setAuth);
   const navigate = useNavigate();
   const [form, setForm] = useState({
     name: user?.name || "",

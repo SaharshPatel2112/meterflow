@@ -3,14 +3,14 @@ import { NavLink } from "react-router-dom";
 import useAuthStore from "../store/authStore";
 
 export default function Sidebar() {
-  const { user } = useAuthStore();
+  const user = useAuthStore((s) => s.user);
+
+  const isAdmin = user?.role === "admin";
 
   const links = [
     { to: "/dashboard", label: "Dashboard", icon: "📊" },
     { to: "/apis", label: "My APIs", icon: "🔌" },
-    ...(user?.role !== "admin"
-      ? [{ to: "/billing", label: "Billing", icon: "💳" }]
-      : []),
+    ...(!isAdmin ? [{ to: "/billing", label: "Billing", icon: "💳" }] : []),
     { to: "/profile", label: "Profile", icon: "👤" },
   ];
 
