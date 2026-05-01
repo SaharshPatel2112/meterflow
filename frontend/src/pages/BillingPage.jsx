@@ -12,9 +12,7 @@ import {
 import { createOrder, verifyPayment } from "../services/api";
 
 export default function BillingPage() {
-  const token = useAuthStore((s) => s.token);
-  const user = useAuthStore((s) => s.user);
-  const setAuth = useAuthStore((s) => s.setAuth);
+  const { token, user, setAuth } = useAuthStore();
   const navigate = useNavigate();
   const [billing, setBilling] = useState(null);
   const [history, setHistory] = useState([]);
@@ -60,13 +58,13 @@ export default function BillingPage() {
   }
 
   const handlePayment = async () => {
-    if (!billing || billing.totalPending <= 0) {
-      alert("No pending amount due!");
+    if (!billing || billing.amount <= 0) {
+      alert("No amount due!");
       return;
     }
 
     try {
-      const res = await createOrder(billing.totalPending);
+      const res = await createOrder(billing.amount);
       const { orderId, amount, currency, keyId } = res.data;
 
       const options = {
@@ -74,7 +72,7 @@ export default function BillingPage() {
         amount,
         currency,
         name: "MeterFlow",
-        description: `Total pending dues`,
+        description: `Pro Plan - ${billing.period}`,
         order_id: orderId,
         handler: async (response) => {
           try {
@@ -89,8 +87,13 @@ export default function BillingPage() {
             alert("Payment verification failed");
           }
         },
-        prefill: { name: user?.name, email: user?.email },
-        theme: { color: "#2563eb" },
+        prefill: {
+          name: user?.name,
+          email: user?.email,
+        },
+        theme: {
+          color: "#2563eb",
+        },
       };
 
       const rzp = new window.Razorpay(options);
@@ -192,14 +195,13 @@ export default function BillingPage() {
           {/* Current Billing */}
           {billing && (
             <div className="current-billing-card">
-              <h3 className="current-billing-title">Total Due Summary</h3>
-
+              <h3 className="current-billing-title">
+                Current Period — {billing.period}
+              </h3>
               <div className="billing-stats-grid">
                 <div>
-                  <p className="billing-stat-label">This Month Requests</p>
-                  <p className="billing-stat-val">
-                    {billing.currentMonthRequests}
-                  </p>
+                  <p className="billing-stat-label">Total Requests</p>
+                  <p className="billing-stat-val">{billing.totalRequests}</p>
                 </div>
                 <div>
                   <p className="billing-stat-label">Free Requests</p>
@@ -214,32 +216,35 @@ export default function BillingPage() {
                   </p>
                 </div>
                 <div>
-                  <p className="billing-stat-label">This Month Amount</p>
-                  <p className="billing-stat-val">
-                    ₹{billing.currentMonthAmount}
-                  </p>
+                  <p className="billing-stat-label">Amount Due</p>
+                  <p className="billing-stat-val">₹{billing.amount}</p>
                 </div>
               </div>
 
-              {billing.totalPending > 0 ? (
+              {billing.status === "paid" ? (
+                <div className="payment-success">
+                  <span>✓</span>
+                  <span>Payment complete for {billing.period}</span>
+                </div>
+              ) : billing.amount > 0 ? (
                 <div className="pay-section">
                   <div className="pay-section-label">
                     <span className="pay-section-title">
-                      Total pending since {billing.oldestUnpaidPeriod}
+                      Total due this period
                     </span>
                     <span className="pay-section-amount">
-                      ₹{billing.totalPending}
+                      ₹{billing.amount}
                     </span>
                   </div>
                   <button className="btn-pay" onClick={handlePayment}>
                     <span>💳</span>
-                    <span>Pay ₹{billing.totalPending} Now</span>
+                    <span>Pay ₹{billing.amount} Now</span>
                   </button>
                 </div>
               ) : (
                 <div className="payment-success">
                   <span>✓</span>
-                  <span>No pending dues — you're all clear!</span>
+                  <span>No payment due — you're within the free limit</span>
                 </div>
               )}
             </div>

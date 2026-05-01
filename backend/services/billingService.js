@@ -3,8 +3,14 @@ import Billing from "../models/Billing.js";
 import User from "../models/User.js";
 
 const PRICING = {
-  free: { freeLimit: 10, pricePer10: 0 },
-  pro: { freeLimit: 10, pricePer10: 1 },
+  free: {
+    freeLimit: 10,
+    pricePer10: 0,
+  },
+  pro: {
+    freeLimit: 10,
+    pricePer10: 1,
+  },
 };
 
 export const calculateBilling = async (userId) => {
@@ -26,8 +32,8 @@ export const calculateBilling = async (userId) => {
     const billableRequests = Math.max(0, totalRequests - pricing.freeLimit);
     const amount = user.plan === "pro" ? (billableRequests / 10) * 1 : 0;
 
-    // Update current month billing
-    await Billing.findOneAndUpdate(
+    // Update or create billing record
+    const billing = await Billing.findOneAndUpdate(
       { userId, period },
       {
         userId,
@@ -41,37 +47,7 @@ export const calculateBilling = async (userId) => {
       { upsert: true, new: true },
     );
 
-    // Calculate total pending (all unpaid months combined)
-    const allPending = await Billing.aggregate([
-      {
-        $match: {
-          userId: user._id,
-          status: "pending",
-          amount: { $gt: 0 },
-        },
-      },
-      {
-        $group: {
-          _id: null,
-          totalPending: { $sum: "$amount" },
-          oldestPeriod: { $min: "$period" },
-        },
-      },
-    ]);
-
-    const totalPending = allPending[0]?.totalPending?.toFixed(2) || "0.00";
-    const oldestPeriod = allPending[0]?.oldestPeriod || period;
-
-    return {
-      currentPeriod: period,
-      currentMonthRequests: totalRequests,
-      freeRequests: pricing.freeLimit,
-      billableRequests,
-      currentMonthAmount: parseFloat(amount.toFixed(2)),
-      totalPending: parseFloat(totalPending),
-      oldestUnpaidPeriod: oldestPeriod,
-      plan: user.plan,
-    };
+    return billing;
   } catch (error) {
     console.error("Billing calculation error:", error.message);
     throw error;

@@ -23,8 +23,7 @@ import {
 } from "../services/api";
 
 export default function DashboardPage() {
-  const token = useAuthStore((s) => s.token);
-  const user = useAuthStore((s) => s.user);
+  const { token } = useAuthStore();
   const navigate = useNavigate();
   const [stats, setStats] = useState(null);
   const [chartData, setChartData] = useState([]);
@@ -35,7 +34,6 @@ export default function DashboardPage() {
 
   useEffect(() => {
     if (!token) return navigate("/login");
-    if (user?.role === "admin") return navigate("/admin");
     fetchAll();
   }, []);
 

@@ -14,7 +14,7 @@ export const createOrder = async (req, res) => {
 
     const { amount } = req.body;
     if (!amount || amount <= 0) {
-      return res.status(400).json({ message: "No amount due" });
+      return res.status(400).json({ message: "Invalid amount" });
     }
 
     const options = {
@@ -24,6 +24,7 @@ export const createOrder = async (req, res) => {
     };
 
     const order = await razorpay.orders.create(options);
+
     res.status(200).json({
       orderId: order.id,
       amount: order.amount,
@@ -32,9 +33,11 @@ export const createOrder = async (req, res) => {
     });
   } catch (error) {
     console.error("Razorpay createOrder error:", error);
-    res
-      .status(500)
-      .json({ message: "Order creation failed", error: error.message });
+    res.status(500).json({
+      message: "Order creation failed",
+      error: error.message,
+      keyLoaded: !!process.env.RAZORPAY_KEY_ID,
+    });
   }
 };
 
@@ -53,10 +56,13 @@ export const verifyPayment = async (req, res) => {
       return res.status(400).json({ message: "Payment verification failed" });
     }
 
-    // Mark ALL pending billing records as paid
-    await Billing.updateMany(
-      { userId: req.user._id, status: "pending", amount: { $gt: 0 } },
+    const now = new Date();
+    const period = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`;
+
+    await Billing.findOneAndUpdate(
+      { userId: req.user._id, period },
       { status: "paid", paidAt: new Date(), paymentId: razorpay_payment_id },
+      { new: true },
     );
 
     res.status(200).json({
