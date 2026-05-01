@@ -57,14 +57,14 @@ export default function BillingPage() {
     return <div className="loading-screen">Loading billing...</div>;
   }
 
-  const handlePayment = async () => {
-    if (!billing || billing.amount <= 0) {
-      alert("No amount due!");
+  const handlePayment = async (totalDue) => {
+    if (!totalDue || totalDue <= 0) {
+      alert("No pending amount due!");
       return;
     }
 
     try {
-      const res = await createOrder(billing.amount);
+      const res = await createOrder(totalDue);
       const { orderId, amount, currency, keyId } = res.data;
 
       const options = {
@@ -72,7 +72,7 @@ export default function BillingPage() {
         amount,
         currency,
         name: "MeterFlow",
-        description: `Pro Plan - ${billing.period}`,
+        description: "Total pending dues",
         order_id: orderId,
         handler: async (response) => {
           try {
@@ -87,13 +87,8 @@ export default function BillingPage() {
             alert("Payment verification failed");
           }
         },
-        prefill: {
-          name: user?.name,
-          email: user?.email,
-        },
-        theme: {
-          color: "#2563eb",
-        },
+        prefill: { name: user?.name, email: user?.email },
+        theme: { color: "#2563eb" },
       };
 
       const rzp = new window.Razorpay(options);
@@ -192,7 +187,6 @@ export default function BillingPage() {
             </div>
           </div>
 
-          {/* Current Billing */}
           {billing && (
             <div className="current-billing-card">
               <h3 className="current-billing-title">
@@ -274,32 +268,41 @@ export default function BillingPage() {
                 </div>
               </div>
 
-              {billing.status === "paid" ? (
-                <div className="payment-success">
-                  <span>✓</span>
-                  <span>Payment complete for {billing.period}</span>
-                </div>
-              ) : billing.amount > 0 ? (
-                <div className="pay-section">
-                  <div className="pay-section-label">
-                    <span className="pay-section-title">
-                      Total due this period
-                    </span>
-                    <span className="pay-section-amount">
-                      ₹{billing.amount}
-                    </span>
+              {/* Pay Section */}
+              {(() => {
+                const totalDue = history
+                  .filter((h) => h.status === "pending" && h.amount > 0)
+                  .reduce((sum, h) => sum + h.amount, 0);
+
+                if (totalDue <= 0) {
+                  return (
+                    <div className="payment-success">
+                      <span>✓</span>
+                      <span>No pending dues — you're all clear!</span>
+                    </div>
+                  );
+                }
+
+                return (
+                  <div className="pay-section">
+                    <div className="pay-section-label">
+                      <span className="pay-section-title">
+                        Total due till date
+                      </span>
+                      <span className="pay-section-amount">
+                        ₹{totalDue.toFixed(2)}
+                      </span>
+                    </div>
+                    <button
+                      className="btn-pay"
+                      onClick={() => handlePayment(totalDue)}
+                    >
+                      <span>💳</span>
+                      <span>Pay ₹{totalDue.toFixed(2)} Now</span>
+                    </button>
                   </div>
-                  <button className="btn-pay" onClick={handlePayment}>
-                    <span>💳</span>
-                    <span>Pay ₹{billing.amount} Now</span>
-                  </button>
-                </div>
-              ) : (
-                <div className="payment-success">
-                  <span>✓</span>
-                  <span>No payment due — you're within the free limit</span>
-                </div>
-              )}
+                );
+              })()}
             </div>
           )}
 
