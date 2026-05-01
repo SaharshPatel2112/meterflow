@@ -25,11 +25,9 @@ export const getBillingHistoryController = async (req, res) => {
 export const upgradePlan = async (req, res) => {
   try {
     const { plan } = req.body;
-
     if (!["free", "pro"].includes(plan)) {
       return res.status(400).json({ message: "Invalid plan" });
     }
-
     const user = await User.findByIdAndUpdate(
       req.user._id,
       { plan },
@@ -37,7 +35,7 @@ export const upgradePlan = async (req, res) => {
     ).select("-password");
 
     res.status(200).json({
-      message: `Plan upgraded to ${plan}`,
+      message: `Plan changed to ${plan}`,
       user: {
         id: user._id,
         name: user.name,
