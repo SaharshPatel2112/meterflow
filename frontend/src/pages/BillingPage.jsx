@@ -158,8 +158,8 @@ export default function BillingPage() {
                   <p className="plan-tagline">For production apps</p>
                 </div>
                 <div>
-                  <span className="plan-price">₹0.5</span>
-                  <span className="plan-price-note">per 100 req</span>
+                  <span className="plan-price">₹1</span>
+                  <span className="plan-price-note">per 10 req</span>
                 </div>
               </div>
               <ul className="plan-features">
