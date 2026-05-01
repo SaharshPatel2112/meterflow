@@ -34,6 +34,7 @@ export default function DashboardPage() {
 
   useEffect(() => {
     if (!token) return navigate("/login");
+    if (user?.role === "admin") return navigate("/admin");
     fetchAll();
   }, []);
 

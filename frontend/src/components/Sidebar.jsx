@@ -8,7 +8,7 @@ export default function Sidebar() {
   const links = [
     { to: "/dashboard", label: "Dashboard", icon: "📊" },
     { to: "/apis", label: "My APIs", icon: "🔌" },
-    ...(user?.plan !== "admin"
+    ...(user?.role !== "admin"
       ? [{ to: "/billing", label: "Billing", icon: "💳" }]
       : []),
     { to: "/profile", label: "Profile", icon: "👤" },
